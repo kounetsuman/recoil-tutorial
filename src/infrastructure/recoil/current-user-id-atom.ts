@@ -2,7 +2,12 @@ import { atom } from 'recoil'
 
 const currentUserIDState = atom({
   key: 'CurrentUserID',
-  default: 1,
+  default: myFetchCurrentUserID(),
 })
 
 export default currentUserIDState
+
+async function myFetchCurrentUserID(): Promise<number> {
+  return 1;
+}
+
