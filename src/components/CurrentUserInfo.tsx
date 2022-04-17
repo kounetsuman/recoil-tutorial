@@ -1,28 +1,38 @@
-import { useRecoilCallback, useRecoilValue } from 'recoil'
+import {
+  useRecoilCallback,
+  useRecoilRefresher_UNSTABLE,
+  useRecoilValue,
+} from 'recoil'
 import currentUserIDState from '../infrastructure/recoil/current-user-id-atom'
-import currentUserInfoQuery from '../infrastructure/recoil/current-user-info-query-selector'
 import friendsInfoQuery from '../infrastructure/recoil/friends-info-query-selector'
 import userInfoQuery from '../infrastructure/recoil/user-info-query-selector-family'
 
 export default function CurrentUserInfo() {
-  const currentUser = useRecoilValue(currentUserInfoQuery)
+  const currentUserID = useRecoilValue(currentUserIDState)
+  const currentUserInfo = useRecoilValue(userInfoQuery(currentUserID))
   const friends = useRecoilValue(friendsInfoQuery)
+  const refreshUserInfo = useRecoilRefresher_UNSTABLE(
+    userInfoQuery(currentUserID),
+  )
 
-  const changeUser = useRecoilCallback(({ snapshot, set }) => (userID: number) => {
-    snapshot.getLoadable(userInfoQuery(userID)) // pre-fetch user info
-    set(currentUserIDState, userID) // change current user to start new render
-  })
+  const changeUser = useRecoilCallback(
+    ({ snapshot, set }) => (userID: number) => {
+      snapshot.getLoadable(userInfoQuery(userID)) // pre-fetch user info
+      set(currentUserIDState, userID) // change current user to start new render
+    },
+  )
 
   return (
     <div>
-      <h1>{currentUser.name}</h1>
+      <h1>{currentUserInfo.name}</h1>
       <ul>
-        {friends.map(friend =>
+        {friends.map((friend) => (
           <li key={friend.id} onClick={() => changeUser(friend.id)}>
             {friend.name}
           </li>
-        )}
+        ))}
       </ul>
+      <button onClick={() => refreshUserInfo()}>Refresh</button>
     </div>
   )
 }
