@@ -1,16 +1,16 @@
 import { selectorFamily } from 'recoil'
 import { myDBQuery } from '../myselfdb/mockDB'
 
-const userNameQuery = selectorFamily({
-  key: 'UserName',
+const userInfoQuery = selectorFamily({
+  key: 'UserInfoQuery',
   get: (userID: number) => async () => {
     try {
       const { user } = await myDBQuery({ userID })
-      return user.name
+      return user
     } catch (e) {
       throw e
     }
   },
 })
 
-export default userNameQuery
+export default userInfoQuery

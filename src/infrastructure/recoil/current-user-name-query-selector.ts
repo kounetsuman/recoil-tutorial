@@ -5,13 +5,14 @@ import currentUserIDState from "./current-user-id-atom";
 const currentUserNameQuery = selector({
     key: 'CurrentUserName',
     get: async ({ get }) => {
-      const response = await myDBQuery({
-        userID: get(currentUserIDState),
-      });
-      if (response.error) {
-        throw response.error;
+      try {
+        const response = await myDBQuery({
+          userID: get(currentUserIDState),
+        });
+        return response.user;
+      } catch (e) {
+        throw e;
       }
-      return response.name;
     },
   });
 

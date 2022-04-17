@@ -1,8 +1,7 @@
-import { Users } from '../../types/User'
+import { User, Users } from '../../types/User'
 
-interface Out {
-  error?: Error,
-  name?: string,
+export interface Out {
+  user: User;
 };
 
 export const myDBQuery = async (query: { userID: number }) => {
@@ -10,24 +9,39 @@ export const myDBQuery = async (query: { userID: number }) => {
     const foundUser = tableOfUsers[query.userID];
     const result = {} as Out;
     if (!foundUser) {
-      result.error = new Error('User not found');
-    } else {
-      result.name = foundUser.name;
+      throw new Error('User not found');
     }
+    result.user = {
+      id: query.userID,
+      ...foundUser,
+    };
     return result;
 }
 
 export const tableOfUsers: Users = {
   1: {
     name: 'テスト一郎',
+    friendList: [],
   },
   2: {
     name: 'テスト二郎',
+    friendList: [{
+      id: 1,
+      name: 'テスト一郎',
+    }],
   },
   3: {
     name: 'テスト三郎',
+    friendList: [{
+      id: 1,
+      name: 'テスト一郎',
+    }, {
+      id: 2,
+      name: 'テスト二郎',
+    }],
   },
   4: {
     name: 'テスト四郎',
+    friendList: [],
   },
 }
