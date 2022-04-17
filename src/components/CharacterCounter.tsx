@@ -4,19 +4,10 @@ import {
 } from 'recoil';
 import charCountState from '../infrastructure/recoil/char-count-selector';
 import textState from '../infrastructure/recoil/text-atom';
-import TodoList from './TodoList';
 
 export default function CharacterCounter() {
     return (
       <>
-        <TodoList />
-        <br />
-        <br />
-        <br />
-        <br />
-        <br />
-        ~ここからテスト~
-        <br />
         <TextInput />
         <br />
         <CharacterCount />
