@@ -3,15 +3,11 @@ import { User } from '../../types/User'
 
 const userInfoState = atomFamily({
   key: 'UserInfo',
-  default: (id: number) => myFetchUserInfo(id),
+  default: (userID: number) => fetch(userInfoURL(userID)),
 })
 
 export default userInfoState
-
-async function myFetchUserInfo(id: number): Promise<User> {
-  return {
-    id: 1,
-    name: 'John',
-    friendList: [],
-  }
+function userInfoURL(userID: number): RequestInfo {
+    return `/api/users/${userID}`
 }
+
